@@ -1,0 +1,12 @@
+# Python Cache
+__pycache__/
+*.pyc
+
+# IDE Settings (PyCharm & VS Code)
+.idea/
+.vscode/
+*.swp
+
+# Virtual Environment
+venv/
+env/
