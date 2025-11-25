@@ -22,15 +22,10 @@ st.markdown("""
     footer {visibility: hidden;}
 
     .block-container {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: stretch;
-        min-height: 100vh;
-        max-width: 1100px;
+        padding-top: 5rem !important;
+        padding-bottom: 10rem !important;
+        margin: 0 auto;                  
+        max-width: 1100px;             
     }
 
     .stApp { background-color: #0f172a; color: #e2e8f0; }
