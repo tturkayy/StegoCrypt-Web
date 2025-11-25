@@ -289,12 +289,12 @@ with st.expander("📏 Capacity Reference: How big of a file can I hide?"):
 
     | Image Resolution | Total Pixels | Max Secret Data | Est. Output PNG Size |
     | :--- | :--- | :--- | :--- |
-    | **HD (720p)** <br> 1280 x 720 | ~0.9 MP | **~0.3 MB** | ~2 - 4 MB |
-    | **FHD (1080p)** <br> 1920 x 1080 | ~2.0 MP | **~0.7 MB** | ~5 - 8 MB |
-    | **2K (QHD)** <br> 2560 x 1440 | ~3.7 MP | **~1.3 MB** | ~10 - 15 MB |
-    | **4K (UHD)** <br> 3840 x 2160 | ~8.3 MP | **~3.1 MB** | ~25 - 35 MB |
-    | **5K** <br> 5120 x 2880 | ~14.7 MP | **~5.5 MB** | ~45 - 60 MB |
-    | **8K** <br> 7680 x 4320 | ~33.2 MP | **~12.4 MB** | ~100 - 130 MB |
+    | **HD (720p)** 1280 x 720 | ~0.9 MP | **~0.3 MB** | ~2 - 4 MB |
+    | **FHD (1080p)** 1920 x 1080 | ~2.0 MP | **~0.7 MB** | ~5 - 8 MB |
+    | **2K (QHD)** 2560 x 1440 | ~3.7 MP | **~1.3 MB** | ~10 - 15 MB |
+    | **4K (UHD)** 3840 x 2160 | ~8.3 MP | **~3.1 MB** | ~25 - 35 MB |
+    | **5K** 5120 x 2880 | ~14.7 MP | **~5.5 MB** | ~45 - 60 MB |
+    | **8K** 7680 x 4320 | ~33.2 MP | **~12.4 MB** | ~100 - 130 MB |
 
     > **Note:** The *Output PNG Size* is large because the image must be saved in a lossless format (PNG) to preserve the hidden data bits. Compression (JPG) destroys the data.
     """)
