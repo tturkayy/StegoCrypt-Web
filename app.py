@@ -313,4 +313,4 @@ with st.expander("📏 Capacity Reference: How big of a file can I hide?"):
     > **Note:** The *Output PNG Size* is large because the image must be saved in a lossless format (PNG) to preserve the hidden data bits. Compression (JPG) destroys the data.
     """)
 
-st.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height: 500px;'></div>", unsafe_allow_html=True)
