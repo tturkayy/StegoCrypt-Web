@@ -5,6 +5,9 @@ import io
 import struct
 import re
 
+MAX_FILE_SIZE_MB = 25
+MAX_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024
+
 st.set_page_config(
     page_title="StegoCrypt",
     page_icon="🔒",
@@ -30,14 +33,11 @@ st.markdown("""
         max-width: 1100px;
     }
 
-    .stApp {
-        background-color: #0f172a;
-        color: #e2e8f0;
-    }
+    .stApp { background-color: #0f172a; color: #e2e8f0; }
 
     div[data-testid="stFileUploader"] section {
         background-color: #1e293b;
-        border: 2px dashed #38bdf8; 
+        border: 2px dashed #38bdf8;
         border-radius: 12px;
         padding: 30px;
         transition: all 0.3s ease;
@@ -89,7 +89,6 @@ st.markdown("""
         margin-bottom: 20px;
         margin-top: 5px;
     }
-
     .section-header {
         font-size: 1.1rem;
         font-weight: 600;
@@ -98,50 +97,50 @@ st.markdown("""
         margin-top: 5px;
     }
 
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 15px;
-        margin-bottom: 20px;
-    }
+    .stTabs [data-baseweb="tab-list"] { gap: 15px; margin-bottom: 20px; }
     .stTabs [data-baseweb="tab"] {
-        background-color: #1e293b;
-        border-radius: 8px;
-        padding: 10px 25px;
-        height: auto;
-        border: 1px solid transparent;
-        color: #94a3b8;
-        font-weight: 600;
+        background-color: #1e293b; border-radius: 8px; padding: 10px 25px;
+        height: auto; border: 1px solid transparent; color: #94a3b8; font-weight: 600;
     }
     .stTabs [aria-selected="true"] {
-        background-color: #38bdf8;
-        color: white;
-        border-color: #38bdf8;
+        background-color: #38bdf8; color: white; border-color: #38bdf8;
     }
 
     ul.pass-rules { list-style-type: none; padding: 0; margin: 8px 0; }
     li.pass-item { font-size: 0.8rem; margin-bottom: 4px; transition: color 0.3s; }
-    .valid { color: #4ade80; font-weight: bold; } 
+    .valid { color: #4ade80; font-weight: bold; }
     .invalid { color: #64748b; }
 
     .custom-footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: #020617;
-        color: #64748b;
-        text-align: center;
-        padding: 15px;
-        border-top: 1px solid #1e293b;
-        z-index: 9999;
+        position: fixed; left: 0; bottom: 0; width: 100%;
+        background-color: #020617; color: #64748b;
+        text-align: center; padding: 15px; border-top: 1px solid #1e293b; z-index: 9999;
     }
     a { color: #38bdf8 !important; text-decoration: none; }
+
+    .big-file-warning {
+        background-color: #1e1e24;
+        border-left: 5px solid #facc15;
+        color: #e2e8f0;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 30px;
+        margin-bottom: 60px;
+        font-size: 0.9rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 col_h1, col_h2 = st.columns([3, 1])
 with col_h1:
-    st.markdown('<p class="main-title">StegoCrypt</p>', unsafe_allow_html=True)
+    st.markdown('<p class="main-title">StegoCrypt 🔒</p>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">AES-256 Steganography Tool</p>', unsafe_allow_html=True)
+
+
+def check_file_size(file):
+    if file is not None and file.size > MAX_BYTES:
+        return False
+    return True
 
 
 def analyze_password(password):
@@ -168,10 +167,12 @@ with tab1:
         cover_image = st.file_uploader("Upload Cover Image (PNG/JPG)", type=["png", "jpg", "jpeg"], key="u1")
         secret_file = st.file_uploader("Upload Secret File (Any Format)", type=None, key="u2")
 
+        if not check_file_size(cover_image) or not check_file_size(secret_file):
+            st.error(f"⚠️ File too large! Max allowed size is {MAX_FILE_SIZE_MB}MB.")
+
     with c2:
         st.markdown('<p class="section-header">2. Security</p>', unsafe_allow_html=True)
-        password = st.text_input("Encryption Password", type="password", placeholder="Enter a strong password",
-                                 key="p1")
+        password = st.text_input("Encryption Password", type="password", placeholder="Enter a strong password", key="p1")
 
         analysis = analyze_password(password if password else "")
         html_list = "<ul class='pass-rules'>"
@@ -185,7 +186,9 @@ with tab1:
         st.write("")
 
         if st.button("ENCRYPT & DOWNLOAD", use_container_width=True):
-            if not cover_image or not secret_file or not password:
+            if not check_file_size(cover_image) or not check_file_size(secret_file):
+                st.error(f"Files must be under {MAX_FILE_SIZE_MB}MB.")
+            elif not cover_image or not secret_file or not password:
                 st.error("Missing files or password.")
             elif not is_password_strong(analysis):
                 st.error("Password is too weak.")
@@ -223,6 +226,9 @@ with tab2:
         st.markdown('<p class="section-header">1. Source Image</p>', unsafe_allow_html=True)
         enc_image = st.file_uploader("Upload Encrypted PNG", type=["png"], key="u3")
 
+        if not check_file_size(enc_image):
+            st.error(f"⚠️ File too large! Max allowed size is {MAX_FILE_SIZE_MB}MB.")
+
     with c_dec2:
         st.markdown('<p class="section-header">2. Authentication</p>', unsafe_allow_html=True)
         dec_pass = st.text_input("Decryption Password", type="password", key="p2")
@@ -231,7 +237,9 @@ with tab2:
         st.write("")
 
         if st.button("DECRYPT & EXTRACT", use_container_width=True):
-            if not enc_image or not dec_pass:
+            if not check_file_size(enc_image):
+                st.error(f"File too large (> {MAX_FILE_SIZE_MB}MB).")
+            elif not enc_image or not dec_pass:
                 st.error("Missing image or password.")
             else:
                 try:
@@ -239,11 +247,11 @@ with tab2:
                         encrypted_data = stego.decode_image(enc_image)
                         decrypted_payload = crypto.decrypt_message(encrypted_data, dec_pass)
 
-                        if decrypted_payload == b"ERROR" or decrypted_payload == b"HATA":
+                        if decrypted_payload == b"ERROR":
                             st.error("Access Denied: Incorrect password.")
                         else:
                             filename_len = struct.unpack('I', decrypted_payload[:4])[0]
-                            filename = decrypted_payload[4: 4 + filename_len].decode('utf-8')
+                            filename = decrypted_payload[4:4 + filename_len].decode('utf-8')
                             file_data = decrypted_payload[4 + filename_len:]
 
                             st.success(f"File Found: {filename}")
@@ -257,10 +265,18 @@ with tab2:
                 except Exception as e:
                     st.error(f"Error: {e}")
 
+st.markdown(f"""
+<div class="big-file-warning">
+    ⚠️ <b>Web Limit:</b> Files larger than <b>{MAX_FILE_SIZE_MB}MB</b> may cause instability.<br>
+    Need to process larger files?
+    <a href="https://github.com/tturkayy/StegoCrypt/releases" target="_blank" style="color: #38bdf8; font-weight:bold;">Download StegoCrypt Desktop</a>.
+</div>
+""", unsafe_allow_html=True)
+
 st.markdown("""
 <div class="custom-footer">
-    StegoCrypt Web v1.0 &nbsp;|&nbsp; Developed by <a href="https://github.com/tturkayy" target="_blank">Turkay Yildirim</a>
+    StegoCrypt Web v1.0 | Developed by <a href="https://github.com/tturkayy" target="_blank">Turkay Yildirim</a>
     <br>
-    <span style="opacity: 0.5; font-size: 12px;">No data is stored on servers. Use Desktop App for max privacy.</span>
+    <span style="opacity: 0.5; font-size: 12px;">No data is stored on servers.</span>
 </div>
 """, unsafe_allow_html=True)
