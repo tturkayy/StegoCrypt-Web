@@ -280,7 +280,21 @@ st.markdown("""
     <span style="opacity: 0.5; font-size: 12px;">No data is stored on servers.</span>
 </div>
 """, unsafe_allow_html=True)
+# using guide for users
+with st.expander("👉🏽 How to use?"):
+    st.markdown("""
+    ### 🔒 Encryption (Hiding a File)
+    1.  **Select Files:** Go to the **ENCRYPT** tab. Upload a Cover Image (PNG/JPG) and the Secret File you want to hide.
+    2.  **Set Password:** Enter a strong password. (Remember this! There is no "Forgot Password" option).
+    3.  **Process:** Click the **ENCRYPT & DOWNLOAD** button.
+    4.  **Save:** Download the resulting `stegocrypt_secure.png` image.
 
+    ### 🔓 Decryption (Extracting a File)
+    1.  **Upload:** Go to the **DECRYPT** tab and upload the image containing the hidden data.
+    2.  **Authenticate:** Enter the password used during encryption.
+    3.  **Extract:** Click **DECRYPT & EXTRACT**.
+    4.  **Recover:** Download your original file.
+    """)
 #capacity guide for general users
 with st.expander("📏 Capacity Reference: How big of a file can I hide?"):
     st.markdown("""
@@ -298,3 +312,5 @@ with st.expander("📏 Capacity Reference: How big of a file can I hide?"):
 
     > **Note:** The *Output PNG Size* is large because the image must be saved in a lossless format (PNG) to preserve the hidden data bits. Compression (JPG) destroys the data.
     """)
+
+st.markdown("<div style='height: 100px;'></div>", unsafe_allow_html=True)
